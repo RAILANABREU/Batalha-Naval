@@ -1,7 +1,6 @@
-from navio import Navio
+from entidade.embarcacao.navio import Navio
 
-
-class Submarino:
+class Submarino(Navio):
     def __init__(self, vida, tamanho):
         self.__vida = vida
         self.__tamanho = tamanho
@@ -12,12 +11,8 @@ class Submarino:
     
     @vida.setter
     def vida(self, vida):
-        self.__vida = vida
+        self.__vida = vida - 1
     
     @property
     def tamanho(self):
         return self.__tamanho
-    
-    @tamanho.setter
-    def tamanho(self, tamanho):
-        self.__tamanho = tamanho

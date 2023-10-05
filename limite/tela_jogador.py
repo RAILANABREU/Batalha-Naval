@@ -1,6 +1,6 @@
 class TelaJogador():
   def tela_opcoes(self):
-    print("-------- Tela Jogador ----------")
+    print("-------- Tela Jogador --------")
     print("Escolha a opcao")
     print("1 - Incluir Jogador")
     print("2 - Alterar Jogador")
