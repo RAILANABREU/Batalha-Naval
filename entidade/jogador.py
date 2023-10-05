@@ -19,3 +19,11 @@ class Jogador:
     @data_nascimento.setter
     def data_nascimento(self, data_nascimento):
         self.__data_nascimento = data_nascimento
+
+    @property
+    def id(self):
+        return self.__id
+    
+    @id.setter
+    def id(self, id):
+        self.__id = id
