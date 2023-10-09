@@ -11,9 +11,6 @@ class ControladorGeral:
         self.__controlador_partida = ControladorPartida(self)
         self.__tela_geral = TelaGeral()
 
-
-
-
     def inicializa_sistema(self):
         self.abre_tela()
 
