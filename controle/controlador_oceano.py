@@ -7,11 +7,10 @@ class ControladorOceano:
         self.__controlador_geral = controlador_geral
 
     def montar_oceano(self):
-        mapa = []
-        linha = []
-        coluna = []
-        for linha in coluna:
-            
+        tamanho_oceano = self.__tela_oceano.tamanho_oceano()
+        linha = [0] * tamanho_oceano
+        mapa = [linha] * tamanho_oceano
+        
 
     def posiciona_navios(self):
         pass
