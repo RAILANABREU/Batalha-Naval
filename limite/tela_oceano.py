@@ -7,7 +7,7 @@ class TelaOceano:
         print("3 - Mostar Jogadas")
         print("4 - Mostrar Meu Oceano")
 
-        opcao = int(input("Escolha a opcao: "))
+        opcao = int(input("Escolha a opção: "))
         return opcao
     
     def tamanho_oceano(self):

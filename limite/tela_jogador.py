@@ -1,7 +1,7 @@
 class TelaJogador():
   def tela_opcoes(self):
     print("-------- Tela Jogador --------")
-    print("Escolha a opcao")
+    print("Escolha uma opçâo")
     print("1 - Incluir Jogador")
     print("2 - Alterar Jogador")
     print("3 - Listar Jogadores")
@@ -10,7 +10,7 @@ class TelaJogador():
     print("6 - Excluir ")
     print("0 - Retornar")
 
-    opcao = int(input("Escolha a opcao: "))
+    opcao = int(input("Escolha a opção: "))
     return opcao
   
   def dados_jogador(self):

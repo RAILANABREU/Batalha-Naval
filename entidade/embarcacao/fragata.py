@@ -1,7 +1,7 @@
 from entidade.embarcacao.navio import Navio
 
 class Fragata(Navio):
-    def __init__(self, vida, tamanho):
+    def __init__(self, vida=3, tamanho=3):
         self.__vida = vida
         self.__tamanho = tamanho
     

@@ -1,7 +1,7 @@
 from entidade.embarcacao.navio import Navio
 
 class Submarino(Navio):
-    def __init__(self, vida, tamanho):
+    def __init__(self, vida=2, tamanho=2):
         self.__vida = vida
         self.__tamanho = tamanho
     

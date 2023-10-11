@@ -2,7 +2,7 @@ from entidade.embarcacao.navio import Navio
 
 
 class PortaAvioes(Navio):
-    def __init__(self, vida, tamanho):
+    def __init__(self, vida=4, tamanho=4):
         self.__vida = vida
         self.__tamanho = tamanho
     
