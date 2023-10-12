@@ -11,8 +11,10 @@ class TelaOceano:
         return opcao
     
     def tamanho_oceano(self):
-        tamanho = int(input('Digite o tamanho do oceano(MxM) que deseja jogar: '))
+        tamanho = int(input("Digite o tamanho do oceano(MxM) que deseja jogar: "))
         return tamanho
 
     def posiciona_navios(self):
-        pass
+        cordenada_y = int(input("Selecione a cordenada do eixo Y: "))
+        cordenada_x = int(input("Selecione a cordenada do eixo X: "))
+        return cordenada_y, cordenada_x

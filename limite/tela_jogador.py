@@ -31,5 +31,9 @@ class TelaJogador():
     print("ID DO JOGADOR: ", dados_jogador["id"])
     print("\n")
 
+  def mostra_rank(self, rank):
+    print(rank)
+  
+
   def mostra_mensagem(self, msg):
     print(msg)

@@ -37,6 +37,13 @@ class ControladorJogador:
         if jogador is not None:
             self.__lista_jogadores.remove(jogador)
 
+    def get_rank(self):
+        players = self.__lista_jogadores
+        players.sort(key=lambda players: players.pontuacao)
+        
+        for i in range(len(players)):
+            self.__tela_jogador.mostra_rank(f'{i+1}º - {players.nome} Pontuação: {players.pontuacao}')
+
     def retornar(self):
         self.__controlador_geral.abre_tela()
     

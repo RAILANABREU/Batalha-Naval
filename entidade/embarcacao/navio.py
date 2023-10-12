@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 
 class Navio(ABC):
-    @abstractmethod
     def __init__(self, vida, tamanho):
-        pass
+        self.__vida = vida
+        self.__tamanho = tamanho
     
     @property
     @abstractmethod

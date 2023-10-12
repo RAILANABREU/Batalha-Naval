@@ -30,3 +30,7 @@ class Jogador:
     @id.setter
     def id(self, id):
         self.__id = id
+
+    @property
+    def pontuacao(self):
+        return self.__pontuacao

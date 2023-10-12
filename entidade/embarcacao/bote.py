@@ -1,10 +1,9 @@
 from entidade.embarcacao.navio import Navio
 
 class Bote(Navio):
-    def __init__(self, vida=1, tamanho=1):
-        self.__vida = vida 
-        self.__tamanho = tamanho
-
+    def __init__(self, vida, tamanho):
+        super().__init__(vida, tamanho)
+        
     @property
     def vida(self):
         return self.__vida
