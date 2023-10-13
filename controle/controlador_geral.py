@@ -27,8 +27,7 @@ class ControladorGeral:
         exit(0)
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastra_jogador, 2: self.cadastra_oceano, 3: self.cadastra_partida,
-                        0: self.encerra_sistema}
+        lista_opcoes = {1: self.cadastra_jogador, 0: self.encerra_sistema}
     
         while True:
             opcao_escolhida = self.__tela_geral.tela_opcoes()

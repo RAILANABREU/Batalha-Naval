@@ -3,8 +3,6 @@ class TelaGeral:
         print("-------- MENU INICIAL ---------")
         print("Escolha sua opcao")
         print("1 - Cadastrar Jogador")
-        print("2 - Cadastrar Oceano")
-        print("3 - Cadastrar Partida")
         print("0 - Finalizar Sistema")
         opcao = int(input("Escolha a opcao:"))
         return opcao

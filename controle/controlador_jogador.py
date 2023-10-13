@@ -4,7 +4,6 @@ from entidade.jogador import Jogador
 class ControladorJogador:
     def __init__(self, controlador_geral):
         self.__lista_jogadores = []
-        self.__historico_partidas = []
         self.__tela_jogador = TelaJogador()
         self.__controlador_geral = controlador_geral
 

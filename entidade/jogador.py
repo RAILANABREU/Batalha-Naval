@@ -5,7 +5,8 @@ class Jogador:
         self.__nome = nome
         self.__data_nascimento = data_nascimento
         self.__id = id
-        self.__pontuacao = pontuacao
+        self.__pontuacao = 0
+        self.__partidas = []
 
     @property
     def nome(self):
@@ -34,3 +35,7 @@ class Jogador:
     @property
     def pontuacao(self):
         return self.__pontuacao
+    
+    @property
+    def partidas(self):
+        return self.__partidas

@@ -6,7 +6,7 @@ from entidade.embarcacao.submarino import Submarino
 from entidade.jogador import Jogador
 
 class Partida:
-    def __init__(self, jogador):
+    def __init__(self, jogador, tamanho_oceano):
         self.__bote1_player = Bote(vida=1, tamanho=1)
         self.__bote2_player = Bote(vida=1, tamanho=1)
         self.__bote3_player = Bote(vida=1, tamanho=1)
@@ -34,5 +34,30 @@ class Partida:
                                     self.__bote3_computador, self.__fragata1_computador,
                                     self.__fragata2_computador, self.__porta_avioes_computador,
                                     self.__submarino1_computador, self.__submarino2_computador] 
+        
+        self.__oceano = Oceano(tamanho_oceano)
+        self.__oceano_player = self.__oceano.oceano_player()
+        self.__oceano_computador = self.__oceano.oceano_computador()
 
         self.__jogador = jogador
+
+
+    @property
+    def jogador(self):
+        return self.__jogador
+
+    @property
+    def navios_player(self):
+        return self.__navios_player
+    
+    @property
+    def navios_computador(self):
+        return self.__navios_computador
+    
+    @property
+    def oceano_player(self):
+        return self.__oceano_player
+    
+    @property
+    def oceano_computador(self):
+        return self.__oceano_computador

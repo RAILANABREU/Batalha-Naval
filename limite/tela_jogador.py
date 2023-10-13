@@ -34,6 +34,5 @@ class TelaJogador():
   def mostra_rank(self, rank):
     print(rank)
   
-
   def mostra_mensagem(self, msg):
     print(msg)

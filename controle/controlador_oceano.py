@@ -5,21 +5,13 @@ from entidade.embarcacao.submarino import Submarino
 from entidade.embarcacao.bote import Bote
 from entidade.embarcacao.porta_avioes import PortaAvioes
 from entidade.embarcacao.fragata import Fragata
+from entidade.partida import Partida
 
 
 class ControladorOceano:
     def __init__(self, controlador_geral):
         self.__tela_oceano = TelaOceano()
         self.__controlador_geral = controlador_geral
-        self.__oceano_player = None
-        self.__oceano_computador = None
-
-    def montar_oceano(self):
-        tamanho_oceano = self.__tela_oceano.tamanho_oceano()
-        linha = [0] * tamanho_oceano
-        mapa = [linha] * tamanho_oceano
-        self.__oceano_player = mapa
-        self.__oceano_computador = mapa
 
     def mostrar_oceano(self):
         for linha in range(len(self.__oceano_player)):
@@ -37,8 +29,8 @@ class ControladorOceano:
             print()
     
     def posiciona_navios(self):
-        barcos_player = ControladorPartida.navio_player()
-        barcos_computador = ControladorPartida.navio_computador()
+        barcos_player = Partida.navios_player()
+        barcos_computador = Partida.navios_computador()
         for boat in barcos_player:
             if isinstance(boat, Bote):    
                 posicao = self.__tela_oceano.posiciona_navios()
