@@ -35,9 +35,8 @@ class Partida:
                                     self.__fragata2_computador, self.__porta_avioes_computador,
                                     self.__submarino1_computador, self.__submarino2_computador] 
         
-        self.__oceano = Oceano(tamanho_oceano)
-        self.__oceano_player = self.__oceano.oceano_player()
-        self.__oceano_computador = self.__oceano.oceano_computador()
+        self.__oceano_player = Oceano(tamanho_oceano)
+        self.__oceano_computador = Oceano(tamanho_oceano)
 
         self.__jogador = jogador
 
