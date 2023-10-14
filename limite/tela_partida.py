@@ -14,3 +14,6 @@ class TelaPartida:
         tamanho_oceano = int(input("Tamanho do oceano: "))
 
         return {"id": id, "tamanho_oceano": tamanho_oceano}
+    
+    def mostra_mensagem(self, msg):
+        return msg

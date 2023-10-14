@@ -7,7 +7,8 @@ class TelaJogador():
     print("3 - Listar Jogadores")
     print("4 - Mostrar Histórico")
     print("5 - Mostrar Ranking dos jogadores")
-    print("6 - Excluir ")
+    print("6 - Seção de Partida")
+    print("7 - Excluir ")
     print("0 - Retornar")
 
     opcao = int(input("Escolha a opção: "))

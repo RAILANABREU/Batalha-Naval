@@ -16,6 +16,12 @@ class TelaOceano:
 
         return cordenada_y, cordenada_x
     
+    def jogada(self):
+        eixo_y = int(input("Selecione a cordenada Y do tiro: "))
+        eixo_x = int(input("selecione a cordenada X do tiro: "))
+
+        return eixo_y, eixo_x
+    
     def mostrar_jogadas(self):
         pass
 

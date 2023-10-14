@@ -35,11 +35,8 @@ class Partida:
                                     self.__fragata2_computador, self.__porta_avioes_computador,
                                     self.__submarino1_computador, self.__submarino2_computador] 
         
-        self.__oceano_player = Oceano(tamanho_oceano)
-        self.__oceano_computador = Oceano(tamanho_oceano)
-
+        self.__monta_oceano = Oceano(tamanho_oceano)
         self.__jogador = jogador
-
 
     @property
     def jogador(self):
@@ -55,8 +52,20 @@ class Partida:
     
     @property
     def oceano_player(self):
-        return self.__oceano_player
+        return self.__monta_oceano.oceano_player()
     
     @property
     def oceano_computador(self):
-        return self.__oceano_computador
+        return self.__monta_oceano.oceano_computador()
+    
+    @property
+    def posicoes_navios_player(self):
+        return self.__monta_oceano.posicoes_navios_player()
+    
+    @property
+    def posicoes_navios_computador(self):
+        return self.__monta_oceano.posicoes_navios_computador()
+    
+    @property
+    def tamanho(self):
+        return self.__monta_oceano.tamanho_oceano()

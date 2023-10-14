@@ -29,6 +29,9 @@ class ControladorJogador:
     def historico_partidas(self):
         pass
 
+    def secao_partida(self):
+        self.__controlador_geral.cadastra_partida()
+
     def deletar_jogador(self):
         self.listar_jogadores()
         id_jogador = self.__tela_jogador.seleciona_jogador() 
@@ -47,7 +50,7 @@ class ControladorJogador:
         self.__controlador_geral.abre_tela()
     
     def abre_tela(self):
-        lista_opcoes = {1: self.inserir_jogador, 2: self.alterar_jogador, 3: self.listar_jogadores, 4: self.historico_partidas, 5: self.rank, 6: self.deletar_jogador, 0: self.retornar}
+        lista_opcoes = {1: self.inserir_jogador, 2: self.alterar_jogador, 3: self.listar_jogadores, 4: self.historico_partidas, 5: self.get_rank, 6: self.secao_partida, 7: self.deletar_jogador, 0: self.retornar}
 
         continua = True
         while continua:

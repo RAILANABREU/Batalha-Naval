@@ -1,7 +1,5 @@
-from entidade.pontuacao import Pontuacao
-
 class Jogador:
-    def __init__(self, nome, data_nascimento, id, pontuacao=Pontuacao):
+    def __init__(self, nome, data_nascimento, id):
         self.__nome = nome
         self.__data_nascimento = data_nascimento
         self.__id = id
