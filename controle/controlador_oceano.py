@@ -32,8 +32,45 @@ class ControladorOceano:
                 self.__tela_partida.mostra_mensagem("Valor inválido, digite um número Válido")
 
     def jogada(self):
-        tiro = self.__tela_oceano.jogada()
-        self.mostrar_jogadas(tiro)
+        tiro_player = True
+        tiro_bot = False
+        while tiro_player:
+            tiro = self.__tela_oceano.jogada()
+            if tiro in self.__jogadas_player:
+                self.__tela_oceano.mostra_mensagem("Você já atirou nessa posição")
+            elif tiro in self.__posicoes_navios_computador:
+                self.__score_player += 1
+                self.__oceano_modelo[tiro[0]][tiro[1]] = self.__oceano_computador[tiro[0]][tiro[1]]
+                self.__jogadas_player.append(tiro)
+                self.__tela_oceano.mostra_mensagem("Você acertou uma embarcação, jogue novamente")
+                self.mostrar_jogadas(tiro)
+                if self.__oceano_computador[tiro[0]][tiro[1]] == 'B':
+                    self.__score_player += 3
+            else:
+                tiro_player = False
+                tiro_bot = True
+                self.__oceano_modelo[tiro[0]][tiro[1]] = 1
+                self.__tela_oceano.mostra_mensagem("Você errou o alvo, espere sua próxima tentativa")
+                self.mostrar_jogadas(tiro)
+                self.__jogadas_player.append(tiro)
+
+        while tiro_bot:
+            shot_y = randrange(self.__tamanho + 1)
+            shot_x = randrange(self.__tamanho + 1)
+            tiro_npc = shot_y, shot_x
+            if tiro_npc in self.__jogadas_computador:
+                continue
+            elif tiro_npc in self.__posicoes_navios_player:
+                self.__score_computador += 1
+                self.__jogadas_computador.append(tiro_npc)
+                self.__tela_oceano.mostra_mensagem("O Computador acertou sua embarcação")
+                self.__oceano_player[tiro_npc[0]][tiro_npc[1]] = 'X'
+                if self.__oceano_player[tiro_npc[0]][tiro_npc[1]] == 'B':
+                    self.__score_computador += 3
+            else:
+                tiro_bot = False
+                self.__jogadas_computador.append(tiro_npc)
+                self.__tela_oceano.mostra_mensagem("O Computador errou, agora é sua vez")
 
     def mostrar_jogadas(self, tiro):
         self.__jogadas_player.append(tiro)
@@ -58,7 +95,7 @@ class ControladorOceano:
         barcos_computador = barco_bot
         for boat in barcos_player:
             if boat.__class__.__name__ == "Bote":  
-                self.posiciona_bote("player")
+                self.posiciona_bote("player", boat.posicoes)
             elif boat.__class__.__name__ == "Fragata":
                 self.posiciona_fragata(boat.tamanho, "player")
             elif boat.__class__.__name__ == "PortaAvioes":
@@ -77,16 +114,19 @@ class ControladorOceano:
                 self.posiciona_submarino(boat.tamanho, "computador")
 
     def posiciona_bote(self, who):
+        lista_temporaria = []
         if who == "player":
             while True:
                 posicao = self.__tela_oceano.posiciona_navios()
                 posicao_em_uso = False
-                if posicao in self.__posicoes_navios_player:
-                    posicao_em_uso = True
-                if posicao_em_uso:
-                    self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
-                else:
-                    self.__posicoes_navios_player.append(posicao)
+                for i in self.__posicoes_navios_player:
+                    if posicao in i:
+                        posicao_em_uso = True
+                    if posicao_em_uso:
+                        self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
+                if not posicao_em_uso:
+                    lista_temporaria.append(posicao)
+                    self.__posicoes_navios_player.append(lista_temporaria)
                     self.__oceano_player[posicao[0]][posicao[1]] = 'B'
                     break
 
@@ -97,13 +137,15 @@ class ControladorOceano:
                 alea = randrange(3)
                 eixox = opc[alea]
                 posicao = eixoy, eixox
-                while posicao in self.__posicoes_navios_computador:
-                    eixoy = randrange(self.__tamanho+1)
-                    opc = [eixoy, eixoy+1, eixoy-1]
-                    alea = randrange(3)
-                    eixox = opc[alea]
-                    posicao = eixoy, eixox
-                self.__posicoes_navios_computador.append(posicao)
+                for i in self.__posicoes_navios_computador:
+                    while posicao in i:
+                        eixoy = randrange(self.__tamanho+1)
+                        opc = [eixoy, eixoy+1, eixoy-1]
+                        alea = randrange(3)
+                        eixox = opc[alea]
+                        posicao = eixoy, eixox
+                lista_temporaria.append(posicao)
+                self.__posicoes_navios_computador.append(lista_temporaria)
                 self.__oceano_computador[posicao[0]][posicao[1]] = 'B'
 
     def posiciona_fragata(self, tamanho, who):
@@ -114,44 +156,50 @@ class ControladorOceano:
                     posicao = self.__tela_oceano.posiciona_navios()
                     posicao_em_uso = False
                     if i == 0:
-                        if posicao in self.__posicoes_navios_player:
-                            posicao_em_uso = True
-                        if posicao_em_uso:
-                            self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
-                        else:
-                            self.__posicoes_navios_player.append(posicao)
+                        for j in self.__posicoes_navios_player:
+                            if posicao in j:
+                                posicao_em_uso = True
+                            if posicao_em_uso:
+                                self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
+                        if not posicao_em_uso:
                             lista_temporaria.append(posicao)
+                            self.__posicoes_navios_player.append(lista_temporaria)
                             self.__oceano_player[posicao[0]][posicao[1]] = 'F'
                             break
 
                     elif i == 1:
-                        if posicao in self.__posicoes_navios_player:
-                            posicao_em_uso = True
-                        if posicao_em_uso:
-                            self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
-                        elif (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
-                        and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
-                        and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
-                            self.__posicoes_navios_player.append(posicao)
-                            lista_temporaria.append(posicao)
-                            self.__oceano_player[posicao[0]][posicao[1]] = 'F'
-                            break
-                        else:
-                            self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
+                        for j in self.__posicoes_navios_player:
+                            if posicao in j:
+                                posicao_em_uso = True
+                            if posicao_em_uso:
+                                self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
+                        if not posicao_em_uso:
+                            if (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
+                            and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
+                            and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
+                                lista_temporaria.append(posicao)
+                                self.__posicoes_navios_player.append(lista_temporaria)
+                                self.__oceano_player[posicao[0]][posicao[1]] = 'F'
+                                break
+                            else:
+                                self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
 
                     elif i == 2:
-                        if posicao in self.__posicoes_navios_player:
-                            posicao_em_uso = True
-                        if posicao_em_uso:
-                            self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
-                        elif (abs(lista_temporaria[1][0] - posicao[0] <= 1))\
-                        and (abs(lista_temporaria[1][1] - posicao[1] <= 1))\
-                        and (abs(lista_temporaria[1][0] - posicao[0]) + abs(lista_temporaria[1][1] - posicao[1]) <= 1):
-                            lista_temporaria.append(posicao)
-                            self.__oceano_player[posicao[0]][posicao[1]] = 'F'
-                            break                        
-                        else:
-                            self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
+                        for j in self.__posicoes_navios_player:
+                            if posicao in j:
+                                posicao_em_uso = True
+                            if posicao_em_uso:
+                                self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
+                        if not posicao_em_uso:
+                            if (abs(lista_temporaria[1][0] - posicao[0] <= 1))\
+                            and (abs(lista_temporaria[1][1] - posicao[1] <= 1))\
+                            and (abs(lista_temporaria[1][0] - posicao[0]) + abs(lista_temporaria[1][1] - posicao[1]) <= 1):
+                                lista_temporaria.append(posicao)
+                                self.__posicoes_navios_player.append(lista_temporaria)
+                                self.__oceano_player[posicao[0]][posicao[1]] = 'F'
+                                break                        
+                            else:
+                                self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
         
         elif who == "computador":
             lista_temporaria = []
@@ -162,31 +210,32 @@ class ControladorOceano:
                     alea = randrange(3)
                     eixox = opc[alea]
                     posicao = eixoy, eixox
-                    while posicao in self.__posicoes_navios_computador:
-                        eixoy = randrange(self.__tamanho+1)
-                        opc = [eixoy, eixoy+1, eixoy-1]
-                        alea = randrange(3)
-                        eixox = opc[alea]
-                        posicao = eixoy, eixox
+                    for j in self.__posicoes_navios_computador:
+                        while posicao in j:
+                            eixoy = randrange(self.__tamanho+1)
+                            opc = [eixoy, eixoy+1, eixoy-1]
+                            alea = randrange(3)
+                            eixox = opc[alea]
+                            posicao = eixoy, eixox
                     if i == 0:
-                        self.__posicoes_navios_computador.append(posicao)
                         lista_temporaria.append(posicao)
+                        self.__posicoes_navios_computador.append(lista_temporaria)
                         self.__oceano_computador[posicao[0]][posicao[1]] = 'F'
                         break
                     elif i == 1:
                         if (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
                             and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
                             and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
-                                self.__posicoes_navios_computador.append(posicao)
                                 lista_temporaria.append(posicao)
+                                self.__posicoes_navios_computador.append(lista_temporaria)
                                 self.__oceano_computador[posicao[0]][posicao[1]] = 'F'
                                 break
                     elif i == 2:
                         if (abs(lista_temporaria[1][0] - posicao[0] <= 1))\
                         and (abs(lista_temporaria[1][1] - posicao[1] <= 1))\
                         and (abs(lista_temporaria[1][0] - posicao[0]) + abs(lista_temporaria[1][1] - posicao[1]) <= 1):
-                            self.__posicoes_navios_computador.append(posicao)
                             lista_temporaria.append(posicao)
+                            self.__posicoes_navios_computador.append(lista_temporaria)
                             self.__oceano_computador[posicao[0]][posicao[1]] = 'F'
                             break                        
 
@@ -198,61 +247,68 @@ class ControladorOceano:
                     posicao = self.__tela_oceano.posiciona_navios()
                     posicao_em_uso = False
                     if i == 0:
-                        if posicao in self.__posicoes_navios_player:
-                            posicao_em_uso = True
-                        if posicao_em_uso:
-                            self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
-                        else:
-                            self.__posicoes_navios_player.append(posicao)
+                        for j in self.__posicoes_navios_player:
+                            if posicao in j:
+                                posicao_em_uso = True
+                            if posicao_em_uso:
+                                self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
+                        if not posicao_em_uso:
                             lista_temporaria.append(posicao)
+                            self.__posicoes_navios_player.append(lista_temporaria)
                             self.__oceano_player[posicao[0]][posicao[1]] = 'P'
                             break
 
                     elif i == 1:
-                        if posicao in self.__posicoes_navios_player:
-                            posicao_em_uso = True
-                        if posicao_em_uso:
-                            self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
-                        elif (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
-                        and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
-                        and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
-                            self.__posicoes_navios_player.append(posicao)
-                            lista_temporaria.append(posicao)
-                            self.__oceano_player[posicao[0]][posicao[1]] = 'P'
-                            break
-                        else:
-                            self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
+                        for j in self.__posicoes_navios_player:
+                            if posicao in j:
+                                posicao_em_uso = True
+                            if posicao_em_uso:
+                                self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
+                        if not posicao_em_uso:
+                            if (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
+                            and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
+                            and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
+                                lista_temporaria.append(posicao)
+                                self.__posicoes_navios_player.append(lista_temporaria)
+                                self.__oceano_player[posicao[0]][posicao[1]] = 'P'
+                                break
+                            else:
+                                self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
 
                     elif i == 2:
-                        if posicao in self.__posicoes_navios_player:
-                            posicao_em_uso = True
-                        if posicao_em_uso:
-                            self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
-                        elif (abs(lista_temporaria[1][0] - posicao[0] <= 1))\
-                        and (abs(lista_temporaria[1][1] - posicao[1] <= 1))\
-                        and (abs(lista_temporaria[1][0] - posicao[0]) + abs(lista_temporaria[1][1] - posicao[1]) <= 1):
-                            self.__posicoes_navios_player.append(posicao)
-                            lista_temporaria.append(posicao)
-                            self.__oceano_player[posicao[0]][posicao[1]] = 'P'
-                            break 
-                        else:
-                            self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
+                        for j in self.__posicoes_navios_player:
+                            if posicao in j:
+                                posicao_em_uso = True
+                            if posicao_em_uso:
+                                self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
+                        if not posicao_em_uso:
+                            if (abs(lista_temporaria[1][0] - posicao[0] <= 1))\
+                            and (abs(lista_temporaria[1][1] - posicao[1] <= 1))\
+                            and (abs(lista_temporaria[1][0] - posicao[0]) + abs(lista_temporaria[1][1] - posicao[1]) <= 1):
+                                lista_temporaria.append(posicao)
+                                self.__posicoes_navios_player.append(lista_temporaria)
+                                self.__oceano_player[posicao[0]][posicao[1]] = 'P'
+                                break 
+                            else:
+                                self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
 
                     elif i == 3:
-                        if posicao in self.__posicoes_navios_player:
-                            posicao_em_uso = True
-                        if posicao_em_uso:
-                            self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
-                        elif (abs(lista_temporaria[2][0] - posicao[0] <= 1))\
-                        and (abs(lista_temporaria[2][1] - posicao[1] <= 1))\
-                        and (abs(lista_temporaria[2][0] - posicao[0]) + abs(lista_temporaria[2][1] - posicao[1]) <= 1):
-                            self.__posicoes_navios_player.append(posicao)
-                            lista_temporaria.append(posicao)
-                            self.__oceano_player[posicao[0]][posicao[1]] = 'P'
-                            break                                 
-                        else:
-                            self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
-        
+                        for j in self.__posicoes_navios_player:
+                            if posicao in j:
+                                posicao_em_uso = True
+                            if posicao_em_uso:
+                                self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
+                        if not posicao_em_uso:
+                            if (abs(lista_temporaria[2][0] - posicao[0] <= 1))\
+                            and (abs(lista_temporaria[2][1] - posicao[1] <= 1))\
+                            and (abs(lista_temporaria[2][0] - posicao[0]) + abs(lista_temporaria[2][1] - posicao[1]) <= 1):
+                                lista_temporaria.append(posicao)
+                                self.__posicoes_navios_player.append(lista_temporaria)
+                                self.__oceano_player[posicao[0]][posicao[1]] = 'P'
+                                break                                 
+                            else:
+                                self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
+            
         elif who == "computador":
             lista_temporaria = []
             for i in range(tamanho):
@@ -262,31 +318,32 @@ class ControladorOceano:
                     alea = randrange(3)
                     eixox = opc[alea]
                     posicao = eixoy, eixox
-                    while posicao in self.__posicoes_navios_computador:
-                        eixoy = randrange(self.__tamanho+1)
-                        opc = [eixoy, eixoy+1, eixoy-1]
-                        alea = randrange(3)
-                        eixox = opc[alea]
-                        posicao = eixoy, eixox
+                    for j in self.__posicoes_navios_computador:
+                        while posicao in j:
+                            eixoy = randrange(self.__tamanho+1)
+                            opc = [eixoy, eixoy+1, eixoy-1]
+                            alea = randrange(3)
+                            eixox = opc[alea]
+                            posicao = eixoy, eixox
                     if i == 0:
-                        self.__posicoes_navios_computador.append(posicao)
                         lista_temporaria.append(posicao)
+                        self.__posicoes_navios_computador.append(lista_temporaria)
                         self.__oceano_computador[posicao[0]][posicao[1]] = 'P'
                         break
                     elif i == 1:
                         if (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
                             and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
                             and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
-                                self.__posicoes_navios_computador.append(posicao)
                                 lista_temporaria.append(posicao)
+                                self.__posicoes_navios_computador.append(lista_temporaria)
                                 self.__oceano_computador[posicao[0]][posicao[1]] = 'P'
                                 break
                     elif i == 2:
                         if (abs(lista_temporaria[1][0] - posicao[0] <= 1))\
                         and (abs(lista_temporaria[1][1] - posicao[1] <= 1))\
                         and (abs(lista_temporaria[1][0] - posicao[0]) + abs(lista_temporaria[1][1] - posicao[1]) <= 1):
-                            self.__posicoes_navios_computador.append(posicao)
                             lista_temporaria.append(posicao)
+                            self.__posicoes_navios_computador.append(lista_temporaria)
                             self.__oceano_computador[posicao[0]][posicao[1]] = 'P'
                             break           
 
@@ -294,8 +351,8 @@ class ControladorOceano:
                         if (abs(lista_temporaria[2][0] - posicao[0] <= 1))\
                         and (abs(lista_temporaria[2][1] - posicao[1] <= 1))\
                         and (abs(lista_temporaria[2][0] - posicao[0]) + abs(lista_temporaria[2][1] - posicao[1]) <= 1):
-                            self.__posicoes_navios_computador.append(posicao)
                             lista_temporaria.append(posicao)
+                            self.__posicoes_navios_computador.append(lista_temporaria)
                             self.__oceano_computador[posicao[0]][posicao[1]] = 'P'
                             break                         
 
@@ -307,30 +364,33 @@ class ControladorOceano:
                     posicao = self.__tela_oceano.posiciona_navios()
                     posicao_em_uso = False
                     if i == 0:
-                        if posicao in self.__posicoes_navios_player:
-                            posicao_em_uso = True
-                        if posicao_em_uso:
-                            self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
-                        else:
-                            self.__posicoes_navios_player.append(posicao)
+                        for j in self.__posicoes_navios_player:
+                            if posicao in j:
+                                posicao_em_uso = True
+                            if posicao_em_uso:
+                                self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
+                    if not posicao_em_uso:
                             lista_temporaria.append(posicao)
+                            self.__posicoes_navios_player.append(lista_temporaria)
                             self.__oceano_player[posicao[0]][posicao[1]] = 'S'
                             break
 
                     elif i == 1:
-                        if posicao in self.__posicoes_navios_player:
-                            posicao_em_uso = True
-                        if posicao_em_uso:
-                            self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
-                        elif (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
-                        and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
-                        and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
-                            self.__posicoes_navios_player.append(posicao)
-                            lista_temporaria.append(posicao)
-                            self.__oceano_player[posicao[0]][posicao[1]] = 'S'
-                            break
-                        else:
-                            self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
+                        for j in self.__posicoes_navios_player:
+                            if posicao in j:
+                                posicao_em_uso = True
+                            if posicao_em_uso:
+                                self.__tela_oceano.mostra_mensagem("Está posição já está ocupada!")
+                        if not posicao_em_uso:
+                            if (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
+                            and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
+                            and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
+                                lista_temporaria.append(posicao)
+                                self.__posicoes_navios_player.append(lista_temporaria)
+                                self.__oceano_player[posicao[0]][posicao[1]] = 'S'
+                                break
+                            else:
+                                self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
 
         elif who == "computador":
             lista_temporaria = []
@@ -341,15 +401,16 @@ class ControladorOceano:
                     alea = randrange(3)
                     eixox = opc[alea]
                     posicao = eixoy, eixox
-                    while posicao in self.__posicoes_navios_computador:
-                        eixoy = randrange(self.__tamanho+1)
-                        opc = [eixoy, eixoy+1, eixoy-1]
-                        alea = randrange(3)
-                        eixox = opc[alea]
-                        posicao = eixoy, eixox
+                    for j in self.__posicoes_navios_computador:
+                        while posicao in j:
+                            eixoy = randrange(self.__tamanho+1)
+                            opc = [eixoy, eixoy+1, eixoy-1]
+                            alea = randrange(3)
+                            eixox = opc[alea]
+                            posicao = eixoy, eixox
                     if i == 0:
-                        self.__posicoes_navios_computador.append(posicao)
                         lista_temporaria.append(posicao)
+                        self.__posicoes_navios_computador.append(lista_temporaria)
                         self.__oceano_computador[posicao[0]][posicao[1]] = 'S'
                         break
 
@@ -357,7 +418,7 @@ class ControladorOceano:
                         if (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
                             and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
                             and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
-                                self.__posicoes_navios_computador.append(posicao)
                                 lista_temporaria.append(posicao)
+                                self.__posicoes_navios_computador.append(lista_temporaria)
                                 self.__oceano_computador[posicao[0]][posicao[1]] = 'S'
                                 break

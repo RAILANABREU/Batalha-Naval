@@ -1,10 +1,9 @@
 from entidade.embarcacao.navio import Navio
 
-
 class PortaAvioes(Navio):
     def __init__(self, vida, tamanho):
         super().__init__(vida, tamanho)
-    
+
     @property
     def vida(self):
         return self.__vida
