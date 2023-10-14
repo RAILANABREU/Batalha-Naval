@@ -66,7 +66,9 @@ class ControladorOceano:
         elif who == "computador":
             while True:
                 eixoy = randrange(Oceano.tamanho_oceano+1)
-                eixox = random.choice([eixoy, eixoy+1, eixoy-1])
+                opc = [eixoy, eixoy+1, eixoy-1]
+                alea = randrange(3)
+                eixox = opc[alea]
                 posicao = eixoy, eixox
                 while posicao in Oceano.posicoes_navios_computador():
                     eixoy = randrange(Oceano.tamanho_oceano+1)
@@ -125,8 +127,40 @@ class ControladorOceano:
                             self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
         
         elif who == "computador":
-            pass
-
+            lista_temporaria = []
+            for i in range(tamanho):
+                while True:
+                    eixoy = randrange(Oceano.tamanho_oceano+1)
+                    opc = [eixoy, eixoy+1, eixoy-1]
+                    alea = randrange(3)
+                    eixox = opc[alea]
+                    posicao = eixoy, eixox
+                    while posicao in Oceano.posicoes_navios_computador():
+                        eixoy = randrange(Oceano.tamanho_oceano+1)
+                        opc = [eixoy, eixoy+1, eixoy-1]
+                        alea = randrange(3)
+                        eixox = opc[alea]
+                        posicao = eixoy, eixox
+                    if i == 0:
+                        Oceano.posicoes_navios_player.append(posicao)
+                        lista_temporaria.append(posicao)
+                        self.__oceano_player[posicao[0]][posicao[1]] = 'F'
+                        break
+                    elif i == 1:
+                        if (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
+                            and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
+                            and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
+                                Oceano.posicoes_navios_computador.append(posicao)
+                                lista_temporaria.append(posicao)
+                                self.__oceano_computador[posicao[0]][posicao[1]] = 'F'
+                                break
+                    elif i == 2:
+                        if (abs(lista_temporaria[1][0] - posicao[0] <= 1))\
+                        and (abs(lista_temporaria[1][1] - posicao[1] <= 1))\
+                        and (abs(lista_temporaria[1][0] - posicao[0]) + abs(lista_temporaria[1][1] - posicao[1]) <= 1):
+                            lista_temporaria.append(posicao)
+                            self.__oceano_player[posicao[0]][posicao[1]] = 'F'
+                            break                        
 
     def posiciona_porta_avioes(self, tamanho, who):
         if who == "player":
@@ -192,7 +226,48 @@ class ControladorOceano:
                             self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
         
         elif who == "computador":
-            pass
+            lista_temporaria = []
+            for i in range(tamanho):
+                while True:
+                    eixoy = randrange(Oceano.tamanho_oceano+1)
+                    opc = [eixoy, eixoy+1, eixoy-1]
+                    alea = randrange(3)
+                    eixox = opc[alea]
+                    posicao = eixoy, eixox
+                    while posicao in Oceano.posicoes_navios_computador():
+                        eixoy = randrange(Oceano.tamanho_oceano+1)
+                        opc = [eixoy, eixoy+1, eixoy-1]
+                        alea = randrange(3)
+                        eixox = opc[alea]
+                        posicao = eixoy, eixox
+                    if i == 0:
+                        Oceano.posicoes_navios_player.append(posicao)
+                        lista_temporaria.append(posicao)
+                        self.__oceano_player[posicao[0]][posicao[1]] = 'P'
+                        break
+                    elif i == 1:
+                        if (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
+                            and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
+                            and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
+                                Oceano.posicoes_navios_computador.append(posicao)
+                                lista_temporaria.append(posicao)
+                                self.__oceano_computador[posicao[0]][posicao[1]] = 'P'
+                                break
+                    elif i == 2:
+                        if (abs(lista_temporaria[1][0] - posicao[0] <= 1))\
+                        and (abs(lista_temporaria[1][1] - posicao[1] <= 1))\
+                        and (abs(lista_temporaria[1][0] - posicao[0]) + abs(lista_temporaria[1][1] - posicao[1]) <= 1):
+                            lista_temporaria.append(posicao)
+                            self.__oceano_player[posicao[0]][posicao[1]] = 'P'
+                            break           
+
+                    elif i == 3:
+                        if (abs(lista_temporaria[2][0] - posicao[0] <= 1))\
+                        and (abs(lista_temporaria[2][1] - posicao[1] <= 1))\
+                        and (abs(lista_temporaria[2][0] - posicao[0]) + abs(lista_temporaria[2][1] - posicao[1]) <= 1):
+                            lista_temporaria.append(posicao)
+                            self.__oceano_player[posicao[0]][posicao[1]] = 'P'
+                            break                         
 
     def posiciona_submarino(self, tamanho, who):
         if who == "player":
@@ -228,4 +303,31 @@ class ControladorOceano:
                             self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
 
         elif who == "computador":
-            pass
+            lista_temporaria = []
+            for i in range(tamanho):
+                while True:
+                    eixoy = randrange(Oceano.tamanho_oceano+1)
+                    opc = [eixoy, eixoy+1, eixoy-1]
+                    alea = randrange(3)
+                    eixox = opc[alea]
+                    posicao = eixoy, eixox
+                    while posicao in Oceano.posicoes_navios_computador():
+                        eixoy = randrange(Oceano.tamanho_oceano+1)
+                        opc = [eixoy, eixoy+1, eixoy-1]
+                        alea = randrange(3)
+                        eixox = opc[alea]
+                        posicao = eixoy, eixox
+                    if i == 0:
+                        Oceano.posicoes_navios_player.append(posicao)
+                        lista_temporaria.append(posicao)
+                        self.__oceano_player[posicao[0]][posicao[1]] = 'S'
+                        break
+
+                    elif i == 1:
+                        if (abs(lista_temporaria[0][0] - posicao[0] <= 1))\
+                            and (abs(lista_temporaria[0][1] - posicao[1] <= 1))\
+                            and (abs(lista_temporaria[0][0] - posicao[0]) + abs(lista_temporaria[0][1] - posicao[1]) <= 1):
+                                Oceano.posicoes_navios_computador.append(posicao)
+                                lista_temporaria.append(posicao)
+                                self.__oceano_computador[posicao[0]][posicao[1]] = 'S'
+                                break
