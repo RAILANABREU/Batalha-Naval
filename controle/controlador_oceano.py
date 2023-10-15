@@ -12,8 +12,8 @@ class ControladorOceano:
         self.__score_player = 0
         self.__score_computador = 0
         self.__controlador_geral = controlador_geral
-        self.__oceano_player = self.__controlador_geral.controlador_partida().partida().oceano_player()
-        self.__oceano_computador = self.__controlador_geral.controlador_partida().partida().oceano_computador()
+        self.__oceano_player = self.__controlador_geral.controlador_partida().oceano_player()
+        self.__oceano_computador = self.__controlador_geral.controlador_partida().oceano_computador()
         self.__posicoes_navios_player = self.__controlador_geral.controlador_partida().partida().posicoes_navios_player()
         self.__posicoes_navios_computador  = self.__controlador_geral.controlador_partida().partida().posicoes_navios_computador()
         self.__tamanho = self.__controlador_geral.controlador_partida().partida().tamanho()
@@ -31,46 +31,70 @@ class ControladorOceano:
             except ValueError:
                 self.__tela_partida.mostra_mensagem("Valor inválido, digite um número Válido")
 
+    def score_player(self):
+        return self.__score_player
+
     def jogada(self):
         tiro_player = True
         tiro_bot = False
         while tiro_player:
+            if self.__score_player == 41:
+                self.__tela_oceano.mostra_mensagem("Você Venceu a batalha, Parabéns")
+                break
             tiro = self.__tela_oceano.jogada()
             if tiro in self.__jogadas_player:
                 self.__tela_oceano.mostra_mensagem("Você já atirou nessa posição")
-            elif tiro in self.__posicoes_navios_computador:
-                self.__score_player += 1
-                self.__oceano_modelo[tiro[0]][tiro[1]] = self.__oceano_computador[tiro[0]][tiro[1]]
-                self.__jogadas_player.append(tiro)
-                self.__tela_oceano.mostra_mensagem("Você acertou uma embarcação, jogue novamente")
-                self.mostrar_jogadas(tiro)
-                if self.__oceano_computador[tiro[0]][tiro[1]] == 'B':
-                    self.__score_player += 3
             else:
-                tiro_player = False
-                tiro_bot = True
-                self.__oceano_modelo[tiro[0]][tiro[1]] = 1
-                self.__tela_oceano.mostra_mensagem("Você errou o alvo, espere sua próxima tentativa")
-                self.mostrar_jogadas(tiro)
-                self.__jogadas_player.append(tiro)
+                errou = False
+                for j in self.__posicoes_navios_computador:
+                    if tiro in j:
+                        self.__score_player += 1
+                        self.__oceano_modelo[tiro[0]][tiro[1]] = self.__oceano_computador[tiro[0]][tiro[1]]
+                        errou = False
+                        self.__jogadas_player.append(tiro)
+                        self.__tela_oceano.mostra_mensagem("Você acertou uma embarcação, jogue novamente")
+                        self.mostrar_jogadas(tiro)
+                        if j[0] == 0 or (j[0] - 1 == 0):
+                            self.__score_player += 3
+                            self.__tela_oceano.mostra_mensagem("Você destuiu uma embarcação adversária!! +3pts")
+                        else:
+                            j[0] = j[0] - 1
+                    else:
+                        errou = True
+                if errou:
+                    tiro_player = False
+                    tiro_bot = True
+                    self.__oceano_modelo[tiro[0]][tiro[1]] = 1
+                    self.mostrar_jogadas(tiro)
+                    self.__tela_oceano.mostra_mensagem("Você errou o alvo, espere sua próxima tentativa")
+                    self.__jogadas_player.append(tiro)
 
         while tiro_bot:
+            if self.__score_computador == 41:
+                self.__tela_oceano.mostra_mensagem("Você Perdeu a Batalha!")
+                break
             shot_y = randrange(self.__tamanho + 1)
             shot_x = randrange(self.__tamanho + 1)
             tiro_npc = shot_y, shot_x
             if tiro_npc in self.__jogadas_computador:
                 continue
-            elif tiro_npc in self.__posicoes_navios_player:
-                self.__score_computador += 1
-                self.__jogadas_computador.append(tiro_npc)
-                self.__tela_oceano.mostra_mensagem("O Computador acertou sua embarcação")
-                self.__oceano_player[tiro_npc[0]][tiro_npc[1]] = 'X'
-                if self.__oceano_player[tiro_npc[0]][tiro_npc[1]] == 'B':
-                    self.__score_computador += 3
             else:
-                tiro_bot = False
-                self.__jogadas_computador.append(tiro_npc)
-                self.__tela_oceano.mostra_mensagem("O Computador errou, agora é sua vez")
+                for j in self.__posicoes_navios_player:
+                    errou = False
+                    if tiro_npc in j:
+                        self.__score_computador += 1
+                        self.__jogadas_computador.append(tiro_npc)
+                        self.__tela_oceano.mostra_mensagem("O Computador acertou sua embarcação")
+                        self.__oceano_player[tiro_npc[0]][tiro_npc[1]] = 'X'
+                        if j[0] == 0 or (j[0] - 1 == 0):
+                            self.__score_computador += 3
+                            self.__tela_oceano.mostra_mensagem("O Computador destruiu uma embarcação sua")
+                        else:
+                            j[0] = j[0] - 1
+                if errou:
+                    tiro_bot = False
+                    self.__jogadas_computador.append(tiro_npc)
+                    self.__tela_oceano.mostra_mensagem("O Computador errou, agora é sua vez")
 
     def mostrar_jogadas(self, tiro):
         self.__jogadas_player.append(tiro)
@@ -114,7 +138,7 @@ class ControladorOceano:
                 self.posiciona_submarino(boat.tamanho, "computador")
 
     def posiciona_bote(self, who):
-        lista_temporaria = []
+        lista_temporaria = [1]
         if who == "player":
             while True:
                 posicao = self.__tela_oceano.posiciona_navios()
@@ -149,8 +173,8 @@ class ControladorOceano:
                 self.__oceano_computador[posicao[0]][posicao[1]] = 'B'
 
     def posiciona_fragata(self, tamanho, who):
+        lista_temporaria =  [3]
         if who == "player":
-            lista_temporaria =  []
             for i in range(tamanho):
                 while True:
                     posicao = self.__tela_oceano.posiciona_navios()
@@ -202,7 +226,6 @@ class ControladorOceano:
                                 self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
         
         elif who == "computador":
-            lista_temporaria = []
             for i in range(tamanho):
                 while True:
                     eixoy = randrange(self.__tamanho+1)
@@ -240,8 +263,8 @@ class ControladorOceano:
                             break                        
 
     def posiciona_porta_avioes(self, tamanho, who):
+        lista_temporaria =  [4]
         if who == "player":
-            lista_temporaria =  []
             for i in range(tamanho):
                 while True:
                     posicao = self.__tela_oceano.posiciona_navios()
@@ -310,7 +333,6 @@ class ControladorOceano:
                                 self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
             
         elif who == "computador":
-            lista_temporaria = []
             for i in range(tamanho):
                 while True:
                     eixoy = randrange(self.__tamanho+1)
@@ -357,8 +379,8 @@ class ControladorOceano:
                             break                         
 
     def posiciona_submarino(self, tamanho, who):
+        lista_temporaria =  [2]
         if who == "player":
-            lista_temporaria =  []
             for i in range(tamanho):
                 while True:
                     posicao = self.__tela_oceano.posiciona_navios()
@@ -393,7 +415,6 @@ class ControladorOceano:
                                 self.__tela_oceano.mostra_mensagem("Está Posição é inválida, por favor insira novamente")
 
         elif who == "computador":
-            lista_temporaria = []
             for i in range(tamanho):
                 while True:
                     eixoy = randrange(self.__tamanho+1)

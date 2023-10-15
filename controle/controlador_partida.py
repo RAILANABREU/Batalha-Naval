@@ -7,8 +7,6 @@ class ControladorPartida:
         self.__jogador = Jogador("a", "b", 1)
         self.__partida = Partida(self.__jogador, 1)
         self.__tela_partida = TelaPartida()
-        self.__navio_player = []
-        self.__navio_computador = []
         self.__controlador_geral = controlador_geral
 
     def comecar_partida(self):
@@ -24,10 +22,10 @@ class ControladorPartida:
         return self.__partida
 
     def navio_player(self):
-        return self.__navio_player
+        return self.__partida.navios_player()
 
     def navio_computador(self):
-        return self.__navio_computador
+        return self.__partida.navios_computador()
 
     def pontuacao(self):
         pass

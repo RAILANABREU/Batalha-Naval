@@ -27,7 +27,14 @@ class ControladorJogador:
             self.__tela_jogador.mostra_jogador({"nome": jogador.nome, "data_nascimento": jogador.data_nascimento, "id": jogador.id})
 
     def historico_partidas(self):
-        pass
+        self.listar_jogadores()
+        id_jogador = self.__tela_jogador.seleciona_jogador() 
+        jogador = self.pega_jogador_por_id(id_jogador)
+        if jogador is not None:
+            self.__tela_jogador.mostra_mensagem(f"O {jogador.nome()}, tem {len(jogador.partidas())} partidas em seu histórico")
+            for i in range(len(jogador.partidas)):
+                self.__tela_jogador.mostra_mensagem(f"Partida Número {i+1}")
+            num = self.__tela_jogador.seleciona_partida()
 
     def secao_partida(self):
         self.__controlador_geral.cadastra_partida()

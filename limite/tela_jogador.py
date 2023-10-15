@@ -32,6 +32,10 @@ class TelaJogador():
     print("ID DO JOGADOR: ", dados_jogador["id"])
     print("\n")
 
+  def seleciona_partida(self):
+    num = int(input("Selecione um número entre as opções: "))
+    return num - 1 
+
   def mostra_rank(self, rank):
     print(rank)
   
