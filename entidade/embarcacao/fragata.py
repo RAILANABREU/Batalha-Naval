@@ -1,16 +1,8 @@
 from entidade.embarcacao.navio import Navio
 
 class Fragata(Navio):
-    def __init__(self, vida, tamanho):
-        super().__init__(vida, tamanho)
-    
-    @property
-    def vida(self):
-        return self.__vida
-    
-    @vida.setter
-    def vida(self, vida):
-        self.__vida = vida - 1
+    def __init__(self, tamanho):
+        super().__init__(tamanho)
     
     @property
     def tamanho(self):

@@ -21,6 +21,15 @@ class ControladorJogador:
     def alterar_jogador(self):
         self.listar_jogadores()
         id_jogador = self.__tela_jogador.seleciona_jogador()
+        player = self.pega_jogador_por_id(id_jogador)
+
+        if (player is not None):
+            novo_player = self.__tela_jogador.dados_jogador()
+            player.nome = novo_player["nome"]
+            player.data_nascimento = novo_player["data_nascimento"]
+            player.id = novo_player["id"]
+        else:
+            self.__tela_jogador.mostra_mensagem("ATENÇÃO: Esse Jogador Não Existe")
 
     def listar_jogadores(self):
         for jogador in self.__lista_jogadores:
@@ -35,6 +44,7 @@ class ControladorJogador:
             for i in range(len(jogador.partidas)):
                 self.__tela_jogador.mostra_mensagem(f"Partida Número {i+1}")
             num = self.__tela_jogador.seleciona_partida()
+            self.__tela_jogador.mostra_mensagem(f"{jogador.partidas()[num-1]}")
 
     def secao_partida(self):
         self.__controlador_geral.cadastra_partida()
@@ -45,6 +55,8 @@ class ControladorJogador:
         jogador = self.pega_jogador_por_id(id_jogador)
         if jogador is not None:
             self.__lista_jogadores.remove(jogador)
+        else:
+            self.__tela_jogador.mostra_mensagem("Esse Jogador Não Existe Para Ser Apagado!")
 
     def get_rank(self):
         players = self.__lista_jogadores
