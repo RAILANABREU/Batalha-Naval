@@ -13,15 +13,15 @@ class TelaOceano:
         print("---Posicionando Navios---")
         while True:
             try:
-                cordenada_y = int(input("Selecione a coordenada do eixo Y: "))
-                cordenada_x = int(input("Selecione a coordenada do eixo X: "))
+                cordenada_y = input("Selecione a coordenada do eixo Y: ")
+                cordenada_x = input("Selecione a coordenada do eixo X: ")
 
                 if not cordenada_y:
                     raise ValueError("A coordenada Y não pode ser vazia.")
                 if not cordenada_x:
                     raise ValueError("A coordenada X não pode ser vazia.")
                 
-                return cordenada_y, cordenada_x
+                return int(cordenada_y), int(cordenada_x)
             except ValueError as ve:
                 print(f"Erro: {ve}.")
     
@@ -49,15 +49,15 @@ class TelaOceano:
     
     def jogada(self):
         try:
-            eixo_y = int(input("Selecione a cordenada Y do tiro: "))
-            eixo_x = int(input("selecione a cordenada X do tiro: "))
+            eixo_y = input("Selecione a cordenada Y do tiro: ")
+            eixo_x = input("selecione a cordenada X do tiro: ")
 
             if not eixo_y:
                 raise ValueError("A coordenada Y não pode ser vazia.")
             if not eixo_x:
                 raise ValueError("A coordenada X não pode ser vazia.")
                 
-            return eixo_y, eixo_x
+            return int(eixo_y), int(eixo_x)
         except ValueError as ve:
             print(f"Erro: {ve}.")
 
