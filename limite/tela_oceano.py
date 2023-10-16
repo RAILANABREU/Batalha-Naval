@@ -27,3 +27,18 @@ class TelaOceano:
 
     def mostra_mensagem(self, msg):
         return msg
+    
+    def mostrar_oceano(self, tamanho, oceano):
+        for linha in range(tamanho):
+            if linha == 0:
+                print(f'Y/X   {linha}', end='   ')
+            else:
+                print(f'{linha}', end='   ')
+        print()
+        for linha in range(tamanho):
+            for coluna in range(tamanho):
+                if coluna == 0:
+                    print(f' {linha}   [{oceano[linha][coluna]}]', end=' ')
+                else:
+                    print(f'[{oceano[linha][coluna]}]', end=' ')
+            print()
