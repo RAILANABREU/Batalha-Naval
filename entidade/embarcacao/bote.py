@@ -11,5 +11,3 @@ class Bote(Embarcacoes):
     @tamanho.setter
     def tamanho(self, tamanho):
         self.__tamanho = tamanho
-        
-    

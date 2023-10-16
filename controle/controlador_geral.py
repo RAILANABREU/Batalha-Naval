@@ -35,8 +35,11 @@ class ControladorGeral:
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastra_jogador, 0: self.encerra_sistema}
-    
+
         while True:
-            opcao_escolhida = self.__tela_geral.tela_opcoes()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
-            funcao_escolhida()
+            try:
+                opcao_escolhida = self.__tela_geral.tela_opcoes()
+                funcao_escolhida = lista_opcoes[opcao_escolhida]
+                funcao_escolhida()
+            except KeyError:
+                print("Opção inválida. Por favor, escolha uma opção válida.")

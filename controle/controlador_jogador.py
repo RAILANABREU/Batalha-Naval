@@ -38,9 +38,7 @@ class ControladorJogador:
     def inserir_jogador(self):
         dados_jogador = self.tela_jogador.dados_jogador()
         player = Jogador(dados_jogador["nome"], dados_jogador["data_nascimento"], dados_jogador["id"])
-        print(player)
         self.lista_jogadores.append(player)
-        print(self.lista_jogadores)
 
     def alterar_jogador(self):
         self.listar_jogadores()
@@ -97,4 +95,12 @@ class ControladorJogador:
 
         continua = True
         while continua:
-            lista_opcoes[self.tela_jogador.tela_opcoes()]()
+            try:
+                opcao = self.tela_jogador.tela_opcoes()
+                if opcao in lista_opcoes:
+                    lista_opcoes[opcao]()
+                else:
+                    self.__tela_jogador.mostra_mensagem("Opção inválida. Por favor, escolha uma opção válida.")
+            except Exception as e:
+                self.__tela_jogador.mostra_mensagem(f"Ocorreu um erro: {e}")
+
